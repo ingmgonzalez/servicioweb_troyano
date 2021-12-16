@@ -67,7 +67,12 @@ def predecirTree(data: Troyano_data):
     yout = model.predict(xin)
     mensaje = ''
     for y_out in yout:
-        mensaje = mensaje + 'El trafico de red ' + labels[y_out] + ' contiene troyano\n'
+        
+        if y_out == 0:
+            mensaje = mensaje + 'El trafico de red esta libre de Troyano\n'
+        else:
+            mensaje = mensaje + 'El trafico de red puede estar infectado de Troyano\n'
+        # mensaje = mensaje + 'El trafico de red ' + labels[y_out] + ' contiene troyano\n'
     
     return mensaje
 
