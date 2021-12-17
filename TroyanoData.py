@@ -1,13 +1,11 @@
 from pydantic import BaseModel
 
 class Troyano_data(BaseModel):
-    Flow_id: int
-    Source_ip: int
+    
     Source_port: int
-    Destination_ip: int
     Destination_port: int 
     Protocol: int
-    Timestamp: int
+    Timestamp: str
     Flow_duration: int
     Total_fwd_packets: int 
     Total_backward_packets: int

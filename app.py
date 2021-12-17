@@ -20,10 +20,7 @@ def predecirTree(data: Troyano_data):
     data = data.dict()
     number = preprocessing.LabelEncoder()
     
-    Flow_id = data['Flow_id']  
-    Source_ip = data['Source_ip']
     Source_port = data['Source_port']  
-    Destination_ip = data['Destination_ip']
     Destination_port = data['Destination_port']   
     Protocol = data['Protocol']  
     Timestamp = data['Timestamp'] 
@@ -52,20 +49,18 @@ def predecirTree(data: Troyano_data):
     Idle_min = data['Idle_min'] 
     
     # Se transforman variables string a numericas 
-    # flow_id = number.fit_transform('121.14.255.84')  
-    # source_ip = number.fit_transform(Source_ip)
-    # destination_ip = number.fit_transform(Destination_ip)  
-    # timestamp = number.fit_transform(Timestamp) 
+    # hour= Timestamp.str[10:17]
+    timestamp = number.fit_transform([Timestamp]) 
     
-    xin = np.array([Flow_id, Source_ip, Source_port, Destination_ip, Destination_port, Protocol, 
-                    Timestamp, Flow_duration, Total_fwd_packets, Total_backward_packets, 
+    xin = np.array([Source_port, Destination_port, Protocol, 
+                    timestamp, Flow_duration, Total_fwd_packets, Total_backward_packets, 
                     Total_length_of_fwd_packets, Fwd_packet_length_max, Fwd_packet_length_min,
                     Fwd_IAT_total, Bwd_IAT_total, Min_packet_length, Max_packet_length,
                     FIN_flag_count, SYN_flag_count, PSH_flag_count, ACK_flag_count, URG_flag_count,
                     Down_up_ratio, Init_Win_bytes_backward, act_data_pkt_fwd, min_seg_size_forward,
-                    Active_max, Active_min, Idle_max, Idle_min]).reshape(1,30)
+                    Active_max, Active_min, Idle_max, Idle_min]).reshape(1,27)
     yout = model.predict(xin)
-    mensaje = ''
+    mensaje = '' 
     for y_out in yout:
         
         if y_out == 0:
@@ -78,7 +73,7 @@ def predecirTree(data: Troyano_data):
 
 
 # Cargar modelo
-pkl_filename = 'modelTroyano_tree.pkl'
+pkl_filename = 'modelTroyano_tree2.pkl'
 with open(pkl_filename, 'rb') as file:
     model = pickle.load(file)
     
