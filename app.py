@@ -1,5 +1,5 @@
-from TroyanoData import Troyano_data
 # importar librerias necesarias 
+from TroyanoData import Troyano_data
 import uvicorn
 from fastapi import FastAPI
 import numpy as np
@@ -49,9 +49,9 @@ def predecirTree(data: Troyano_data):
     Idle_min = data['Idle_min'] 
     
     # Se transforman variables string a numericas 
-    # hour= Timestamp.str[10:17]
-    timestamp = number.fit_transform([Timestamp]) 
-    
+    hour= Timestamp[11:18]
+    timestamp = number.fit_transform([hour]) 
+     
     xin = np.array([Source_port, Destination_port, Protocol, 
                     timestamp, Flow_duration, Total_fwd_packets, Total_backward_packets, 
                     Total_length_of_fwd_packets, Fwd_packet_length_max, Fwd_packet_length_min,
@@ -59,7 +59,9 @@ def predecirTree(data: Troyano_data):
                     FIN_flag_count, SYN_flag_count, PSH_flag_count, ACK_flag_count, URG_flag_count,
                     Down_up_ratio, Init_Win_bytes_backward, act_data_pkt_fwd, min_seg_size_forward,
                     Active_max, Active_min, Idle_max, Idle_min]).reshape(1,27)
+    
     yout = model.predict(xin)
+    
     mensaje = '' 
     for y_out in yout:
         
@@ -67,7 +69,6 @@ def predecirTree(data: Troyano_data):
             mensaje = mensaje + 'El trafico de red esta libre de Troyano\n'
         else:
             mensaje = mensaje + 'El trafico de red puede estar infectado de Troyano\n'
-        # mensaje = mensaje + 'El trafico de red ' + labels[y_out] + ' contiene troyano\n'
     
     return mensaje
 
@@ -81,3 +82,5 @@ labels = ['No', 'SI'] # Etiquetas de datos
 
 if __name__ == '__main__':
     uvicorn.run(app, host='127.0.0.1', port=8000)
+    
+# uvicorn app:app --reload
